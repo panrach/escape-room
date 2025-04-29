@@ -19,7 +19,7 @@ export default function Puzzle({
     setIsCheckingLocation(true);
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const userLocation = {
             lat: position.coords.latitude,
@@ -41,10 +41,18 @@ export default function Puzzle({
           }
 
           setIsCheckingLocation(false);
+
+          // Stop watching the position after getting the result
+          navigator.geolocation.clearWatch(watchId);
         },
-        () => {
+        (error) => {
           setMessage("Unable to get your location. Please try again.");
           setIsCheckingLocation(false);
+        },
+        {
+          enableHighAccuracy: false, // Use lower accuracy for faster results
+          timeout: 5000, // Maximum time to wait for location (in milliseconds)
+          maximumAge: 0, // Do not use cached location data
         }
       );
     } else {
