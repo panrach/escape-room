@@ -14,6 +14,10 @@ export default function Puzzle({
 }) {
   const [message, setMessage] = useState("");
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
+
+  // this is extremely jank right now as geolocation is very slow on mobile for some reason
+  // im fairly confident that my bf will get the location correct, so i am defaulting it to
+  // correct behaviour until i can find a better location solution
   const handleSolve = async () => {
     setIsCheckingLocation(true);
 
@@ -52,7 +56,8 @@ export default function Puzzle({
         },
         () => {
           clearTimeout(fallbackTimeout); // Clear the fallback if an error occurs
-          setMessage("Unable to get your location. Please try again.");
+          setMessage("Correct! Moving to the next puzzle...");
+          setTimeout(onSolve, 2000); // Navigate to the next puzzle
           setIsCheckingLocation(false);
         },
         {
@@ -63,7 +68,8 @@ export default function Puzzle({
       );
     } else {
       clearTimeout(fallbackTimeout); // Clear the fallback if geolocation is not supported
-      setMessage("Geolocation is not supported by your browser.");
+      setMessage("Correct! Moving to the next puzzle...");
+      setTimeout(onSolve, 2000); // Navigate to the next puzzle
       setIsCheckingLocation(false);
     }
   };
