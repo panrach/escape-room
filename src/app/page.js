@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import { Box, Typography, Button } from "@mui/material";
 
 export default function Home() {
   const router = useRouter();
@@ -10,14 +10,53 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Anniversary Escape Room</h1>
-      <p className={styles.description}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        backgroundColor: "#ffe4e1", // Light pink background
+        padding: 3,
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{
+          fontWeight: "bold",
+          color: "#b22222", // Romantic red
+          marginBottom: 2,
+        }}
+      >
+        Anniversary Escape Room
+      </Typography>
+      <Typography
+        variant="h6"
+        sx={{
+          color: "#8b0000", // Darker red for contrast
+          marginBottom: 3,
+        }}
+      >
         Can you escape in time?
-      </p>
-      <button className={styles.startButton} onClick={startGame}>
-        Start 
-      </button>
-    </div>
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={startGame}
+        sx={{
+          backgroundColor: "#ff69b4", // Hot pink
+          color: "#fff",
+          fontWeight: "bold",
+          padding: "10px 20px",
+          fontSize: "1.2rem",
+          "&:hover": {
+            backgroundColor: "#ff1493", // Deep pink on hover
+          },
+        }}
+      >
+        Start
+      </Button>
+    </Box>
   );
 }
