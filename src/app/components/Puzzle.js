@@ -15,9 +15,6 @@ export default function Puzzle({
   const [message, setMessage] = useState("");
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
 
-  // this is extremely jank right now as geolocation is very slow on mobile for some reason
-  // im fairly confident that my bf will get the location correct, so i am defaulting it to
-  // correct behaviour until i can find a better location solution
   const handleSolve = async () => {
     setIsCheckingLocation(true);
 
@@ -31,7 +28,7 @@ export default function Puzzle({
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          clearTimeout(fallbackTimeout); // Clear the fallback if location is retrieved in time
+          clearTimeout(fallbackTimeout);
 
           const userLocation = {
             lat: position.coords.latitude,
@@ -47,7 +44,7 @@ export default function Puzzle({
 
           if (distance <= radius) {
             setMessage("Correct! Moving to the next puzzle...");
-            setTimeout(onSolve, 2000); // Navigate to the next puzzle
+            setTimeout(onSolve, 2000);
           } else {
             setMessage("You are not at the correct location!");
           }
@@ -55,9 +52,9 @@ export default function Puzzle({
           setIsCheckingLocation(false);
         },
         () => {
-          clearTimeout(fallbackTimeout); // Clear the fallback if an error occurs
+          clearTimeout(fallbackTimeout);
           setMessage("Correct! Moving to the next puzzle...");
-          setTimeout(onSolve, 2000); // Navigate to the next puzzle
+          setTimeout(onSolve, 2000);
           setIsCheckingLocation(false);
         },
         {
@@ -67,14 +64,13 @@ export default function Puzzle({
         }
       );
     } else {
-      clearTimeout(fallbackTimeout); // Clear the fallback if geolocation is not supported
+      clearTimeout(fallbackTimeout);
       setMessage("Correct! Moving to the next puzzle...");
-      setTimeout(onSolve, 2000); // Navigate to the next puzzle
+      setTimeout(onSolve, 2000);
       setIsCheckingLocation(false);
     }
   };
 
-  // copilot did this
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371e3; // Earth's radius in meters
@@ -91,6 +87,13 @@ export default function Puzzle({
     return R * c; // Distance in meters
   };
 
+  // Generate an array of hearts for the rainfall effect
+  const hearts = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100, // Random horizontal position
+    delay: Math.random() * 5, // Random delay for staggered animation
+  }));
+
   return (
     <Box
       sx={{
@@ -102,8 +105,34 @@ export default function Puzzle({
         backgroundColor: "#ffe4e1", // Light pink background
         padding: 3,
         textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Hearts Rainfall */}
+      {hearts.map((heart) => (
+        <motion.div
+          key={heart.id}
+          initial={{ y: "-100%", opacity: 0 }}
+          animate={{ y: "110%", opacity: 1 }}
+          transition={{
+            duration: 4,
+            delay: heart.delay,
+            repeat: Infinity,
+            repeatType: "loop",
+          }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: `${heart.left}%`,
+            fontSize: "2rem",
+            color: "#ff69b4",
+          }}
+        >
+          ❤️
+        </motion.div>
+      ))}
+
       {image && (
         <Box
           component="img"
@@ -121,7 +150,7 @@ export default function Puzzle({
         variant="h3"
         sx={{
           fontWeight: "bold",
-          color: "#b22222", // Romantic red
+          color: "#b22222",
           marginBottom: 2,
         }}
       >
@@ -132,6 +161,15 @@ export default function Puzzle({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
+          style={{
+            background: "linear-gradient(135deg, #fff8dc, #f5deb3)",
+            padding: "30px",
+            borderRadius: "15px",
+            boxShadow: "0 8px 12px rgba(0, 0, 0, 0.2)",
+            marginBottom: "20px",
+            maxWidth: "600px",
+            border: "2px solid #d2b48c",
+          }}
         >
           {poem.map((line, index) => (
             <Typography
@@ -142,7 +180,8 @@ export default function Puzzle({
                 color: "#8b0000",
                 marginBottom: 2,
                 fontStyle: "italic",
-                textIndent: "2em", // Add indent for each line
+                textIndent: "1em",
+                marginLeft: "-1em", // Shift the text slightly to the left
               }}
             >
               {line}
@@ -153,7 +192,7 @@ export default function Puzzle({
       <Typography
         variant="h6"
         sx={{
-          color: "#8b0000", // Darker red for contrast
+          color: "#8b0000",
           marginBottom: 3,
         }}
       >
@@ -164,13 +203,13 @@ export default function Puzzle({
         onClick={handleSolve}
         disabled={isCheckingLocation}
         sx={{
-          backgroundColor: "#ff69b4", // Hot pink
+          backgroundColor: "#ff69b4",
           color: "#fff",
           fontWeight: "bold",
           padding: "10px 20px",
           fontSize: "1.2rem",
           "&:hover": {
-            backgroundColor: "#ff1493", // Deep pink on hover
+            backgroundColor: "#ff1493",
           },
         }}
       >
