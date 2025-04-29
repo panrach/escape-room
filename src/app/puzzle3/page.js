@@ -5,7 +5,6 @@ import Puzzle from "../components/Puzzle";
 
 export default function Puzzle1() {
   const router = useRouter();
-
   const [userLocation, setUserLocation] = useState(null);
 
   // for testing (just set the location to the correct one)
@@ -29,19 +28,21 @@ export default function Puzzle1() {
   }, []);
 
   const handleSolve = () => {
-    router.push("/puzzle2");
+    router.push("/puzzle4");
   };
 
   return (
     <Puzzle
-      title="Chapter 1: The Beginning"
+      title="Chapter 3: Sharing Meals"
       poem={[
-        "In 2023, we had our first chat.",
-        "The relationship blossomed, between Rachel & Matt.",
-      ]}      
-      question="Can you find the place where we first met?"
+        "We love pizza and pasta, and chinese food.",
+        "The food we eat, always puts us in a good mood.",
+        "There is one meal I know you always find nice.",
+        "How would you feel about a bowl of fried rice?",
+      ]}
+      question="Where will we eat dinner after the show?"
       correctLocation={userLocation}
-      // correctLocation={{ lat: 43.651007, lng: -79.376625 }}
+      // correctLocation={{ lat: 43.658297989311805, lng: -79.38187066579773}}
       radius={500}
       onSolve={handleSolve}
     />

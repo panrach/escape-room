@@ -29,19 +29,20 @@ export default function Puzzle1() {
   }, []);
 
   const handleSolve = () => {
-    router.push("/puzzle2");
+    router.push("/puzzle3");
   };
 
   return (
     <Puzzle
-      title="Chapter 1: The Beginning"
-      poem={[
-        "In 2023, we had our first chat.",
-        "The relationship blossomed, between Rachel & Matt.",
-      ]}      
-      question="Can you find the place where we first met?"
+      title="Chapter 2: Adventures Await"
+      poem={["We've watched pianists and musicals, orchestras too.",
+      "From the stage to the seats, our love only grew.",
+      "Today's performance is totally new.",
+      "At the Four Seasons, we'll have a nice view",
+      "Of a beautiful dance, just me and you."]}
+      question="Can you find our next activity?"
       correctLocation={userLocation}
-      // correctLocation={{ lat: 43.651007, lng: -79.376625 }}
+      // correctLocation={{ lat:  43.65031268330466, lng: -79.38607533247138 }}
       radius={500}
       onSolve={handleSolve}
     />

@@ -1,15 +1,23 @@
 "use client";
 import { Box, Typography, Button, Alert } from "@mui/material";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
-export default function Puzzle({ title, question, correctLocation, radius, onSolve }) {
+export default function Puzzle({
+  title,
+  poem,
+  question,
+  image,
+  correctLocation,
+  radius,
+  onSolve,
+}) {
   const [message, setMessage] = useState("");
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
 
   const handleSolve = async () => {
     setIsCheckingLocation(true);
 
-    // Get the user's current location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -18,7 +26,6 @@ export default function Puzzle({ title, question, correctLocation, radius, onSol
             lng: position.coords.longitude,
           };
 
-          // Check if the user's location is within the radius
           const distance = calculateDistance(
             userLocation.lat,
             userLocation.lng,
@@ -46,7 +53,6 @@ export default function Puzzle({ title, question, correctLocation, radius, onSol
     }
   };
 
-  // Function to calculate the distance between two coordinates (Haversine formula)
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371e3; // Earth's radius in meters
@@ -76,6 +82,19 @@ export default function Puzzle({ title, question, correctLocation, radius, onSol
         textAlign: "center",
       }}
     >
+      {image && (
+        <Box
+          component="img"
+          src={image}
+          alt="Puzzle Image"
+          sx={{
+            width: "100%",
+            maxWidth: "500px",
+            borderRadius: "10px",
+            marginBottom: 3,
+          }}
+        />
+      )}
       <Typography
         variant="h3"
         sx={{
@@ -86,6 +105,29 @@ export default function Puzzle({ title, question, correctLocation, radius, onSol
       >
         {title}
       </Typography>
+      {Array.isArray(poem) && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          {poem.map((line, index) => (
+            <Typography
+              key={index}
+              variant="h5"
+              sx={{
+                fontFamily: "cursive",
+                color: "#8b0000",
+                marginBottom: 2,
+                fontStyle: "italic",
+                textIndent: "2em", // Add indent for each line
+              }}
+            >
+              {line}
+            </Typography>
+          ))}
+        </motion.div>
+      )}
       <Typography
         variant="h6"
         sx={{
