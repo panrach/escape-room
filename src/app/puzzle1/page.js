@@ -40,8 +40,8 @@ export default function Puzzle1() {
         "The relationship blossomed, between Rachel & Matt.",
       ]}      
       question="Can you find the place where we first met?"
-      // correctLocation={userLocation}
-      correctLocation={{ lat: 43.651007, lng: -79.376625 }}
+      correctLocation={userLocation}
+      // correctLocation={{ lat: 43.651007, lng: -79.376625 }}
       radius={500}
       onSolve={handleSolve}
     />
