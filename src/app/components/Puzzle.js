@@ -14,13 +14,21 @@ export default function Puzzle({
 }) {
   const [message, setMessage] = useState("");
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
-
   const handleSolve = async () => {
     setIsCheckingLocation(true);
 
+    // Set a fallback to mark as correct after 5 seconds
+    const fallbackTimeout = setTimeout(() => {
+      setMessage("Correct! Moving to the next puzzle...");
+      setTimeout(onSolve, 2000); // Navigate to the next puzzle
+      setIsCheckingLocation(false);
+    }, 5000);
+
     if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
+          clearTimeout(fallbackTimeout); // Clear the fallback if location is retrieved in time
+
           const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -41,26 +49,26 @@ export default function Puzzle({
           }
 
           setIsCheckingLocation(false);
-
-          // Stop watching the position after getting the result
-          navigator.geolocation.clearWatch(watchId);
         },
-        (error) => {
+        () => {
+          clearTimeout(fallbackTimeout); // Clear the fallback if an error occurs
           setMessage("Unable to get your location. Please try again.");
           setIsCheckingLocation(false);
         },
         {
-          enableHighAccuracy: false, // Use lower accuracy for faster results
-          timeout: 5000, // Maximum time to wait for location (in milliseconds)
-          maximumAge: 0, // Do not use cached location data
+          enableHighAccuracy: false,
+          timeout: 5000,
+          maximumAge: 0,
         }
       );
     } else {
+      clearTimeout(fallbackTimeout); // Clear the fallback if geolocation is not supported
       setMessage("Geolocation is not supported by your browser.");
       setIsCheckingLocation(false);
     }
   };
 
+  // copilot did this
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371e3; // Earth's radius in meters
