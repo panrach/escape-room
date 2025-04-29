@@ -42,9 +42,14 @@ export default function Puzzle({
 
           setIsCheckingLocation(false);
         },
-        () => {
+        (error) => {
           setMessage("Unable to get your location. Please try again.");
           setIsCheckingLocation(false);
+        },
+        {
+          enableHighAccuracy: false, // Use lower accuracy for faster results
+          timeout: 5000, // Maximum time to wait for location (in milliseconds)
+          maximumAge: 0, // Do not use cached location data
         }
       );
     } else {
