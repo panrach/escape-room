@@ -30,7 +30,7 @@ export default function Home() {
           marginBottom: 2,
         }}
       >
-        Anniversary Escape Room
+        Birthday Escape Room
       </Typography>
       <Typography
         variant="h6"
@@ -39,7 +39,7 @@ export default function Home() {
           marginBottom: 3,
         }}
       >
-        Can you escape in time?
+        Can you escape?
       </Typography>
       <Button
         variant="contained"
